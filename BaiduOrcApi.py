@@ -10,7 +10,7 @@ class cal:
 
     #获取网页授权
     def __init__(self,API_KEY,SECRET_KEY,token_url,out_url):
-        print("欢迎使用")
+        print("<欢迎使用>")
         #状态符
         self.fire = 0#异常符号
 
@@ -33,7 +33,7 @@ class cal:
 
     #获取token，api授权码
     def get_access_token(self) ->None:
-        print("获取token(访问令牌)")
+        print("<正在获取token访问令牌...>")
         try:
             url = self.token_url
             params = {
@@ -46,13 +46,13 @@ class cal:
 
             #return result.get("access_token")#旧方法使用返回值，用类就直接内部修改好了
         except Exception as e:
-            print("获取token异常:", e)
+            print("<获取token异常:"+e+">")
             self.fire = 1#fire异常符号
 
     #base64转换图片格式
     @staticmethod
     def get_file_content_as_base64(path, urlencoded=False):
-        print("转换图片格式")
+        print("<正在转换图片格式...>")
         with open(path, "rb") as f:
             content = base64.b64encode(f.read()).decode("utf8")
             if urlencoded:
@@ -61,7 +61,7 @@ class cal:
 
     # 网页请求并且接收数据
     def requests(self) -> None:
-        print("等待返回值")
+        print("<等待返回值...>")
         url = self.out_url
         #网页授权
         params = {
@@ -103,7 +103,8 @@ class cal:
             print(item["words"])
 
         print("=" * 30)
-        print(f" 共识别到 {result.get('words_result_num', 0)} 行文字")
+        print(f"共识别到 {result.get('words_result_num', 0)} 行文字")
+        print("=" * 30)
 
     #获取网页授权的网址
     def get_token_url(self,get_token_url) ->None:
@@ -114,7 +115,7 @@ class cal:
         self.out_url = get_out_url
 
     def ORC_init(self,API_KEY,SECRET_KEY,token_url,out_url):
-        print("初始化...")
+        print("<初始化...>")
 
         ########################################################给变量赋值
         self.token_url = token_url
@@ -126,10 +127,10 @@ class cal:
         #获取token网址授权
         self.get_access_token()
         if not self.access_token:#判断token是否为空
-            print("获取 token 失败！")
+            print("<获取 token 失败！>")
             return
 
-        print("初始化成功")
+        print("<初始化成功>")
 
     def input_five(self):
         return self.fire
@@ -147,11 +148,13 @@ class cal:
 
     @staticmethod
     def help():
-        print("self.ORC_Use() --图片地址 #进入程序"
-              "eslf.get_token_url --获取访问令牌网址 #修改token网址"
-              "self.get_out_url  --调用api网址 #设置api网址")
+        print("--->   self.ORC_Use() --图片地址 #进入程序"
+              "\n--->   eslf.get_token_url --获取访问令牌网址 #修改token网址"
+              "\n--->   self.get_out_url  --调用api网址 #设置api网址")
 
 if __name__ == '__main__':
+
+    #测试
 
     API_KEY = "uYfIjXV6XRi9ZLtRBm6jA4x1"
     SECRET_KEY = "gXnGLyF27JaXHdVLW6B47jede80Sfecr"
@@ -164,19 +167,19 @@ if __name__ == '__main__':
     a=cal(API_KEY,SECRET_KEY,token_url,out_url)
 
     while True:
-        Address=input("请输入图片地址,输入td退出").strip().strip('"').strip("'")#strip()消除指定字符串
+        Address=input("(请输入图片地址,输入td退出)").strip().strip('"').strip("'")#strip()消除指定字符串
 
         if Address=="cs":
-            print("使用测试图片")
+            print("<使用测试图片>")
             Address = r"C:\Users\Administrator\Desktop\Python\百度云示范文件\批注 2026-04-16 152003.jpg"
 
         elif Address == "td":#退出while
             break
         if  os.path.exists(Address):#判断地址是否有效
-            print("\n地址有效")
+            print("\n<地址有效>")
             a.ORC_Use(Address)
         else:
-            print("\n无效地址")
+            print("\n<无效地址>")
 
 
     """
