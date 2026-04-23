@@ -8,18 +8,24 @@ import dbini#读取额瓶子文件
 3，学习python规范代码
 4，每次Orc的API调用是需要钱的
 """
+#声明必要函数
+API_KEY = SECRET_KEY = token_url = out_url = ""   #运行时使用的参数
+db_API_KEY = db_SECRET_KEY = db_token_url = db_out_url = ""   #保存配置文件的参数
 
-try:
-    # 创建类，使用配置文件
-    cal = dbini.dbini()
-    # 获取配置文件
-    db_API_KEY, db_SECRET_KEY, db_token_url, db_out_url = cal.set()
-    API_KEY, SECRET_KEY, token_url, out_url = db_API_KEY, db_SECRET_KEY, db_token_url, db_out_url
-    print("<读取配置文件成功>")
-except Exception as e:
-    print("读取配置文件异常，请检查\" db.ini \"是否存在或格式正确")
-    print("<错误详情：",e,">")
-    input("(按回车退出)")
+#读取配置文件
+def config():
+    try:
+        # 创建类，使用配置文件
+        cal = dbini.dbini()
+        # 获取配置文件
+        db_API_KEY, db_SECRET_KEY, db_token_url, db_out_url = cal.set()
+        API_KEY, SECRET_KEY, token_url, out_url = db_API_KEY, db_SECRET_KEY, db_token_url, db_out_url
+        print("<读取配置文件成功>")
+        return API_KEY, SECRET_KEY, token_url, out_url
+    except Exception as e:
+        print("读取配置文件异常，请检查\" db.ini \"是否存在或格式正确")
+        print("<错误详情：",e,">")
+        input("(按回车退出)")
 
 #打包了一个用于打开Orc的函数
 def Cal_Api(API_KEY, SECRET_KEY, token_url, out_url):
@@ -95,6 +101,7 @@ def main():
                 mode_3_mr()
             #退出，退订
             elif mode in ("td", "TD"):
+                print("<正在退出...>")
                 mode = None
                 running_main = False
                 exit()
@@ -109,6 +116,7 @@ def mode_1_cs():
     try:
 
         print("<进入测试选项>")
+        print("<已传入测试参数>")
         # 测试的默认值
         API_KEY = "uYfIjXV6XRi9ZLtRBm6jA4x1"
         SECRET_KEY = "gXnGLyF27JaXHdVLW6B47jede80Sfecr"
@@ -158,14 +166,19 @@ def mode_2_zu():
 
 def mode_3_mr():
     try:
-        # 神秘bug
-        # 因为没有输入参数，函数内部存在修改变量的操作，所以内部生成了同名空变量，直接从新赋值一次创建新的内部变量
-        API_KEY, SECRET_KEY, token_url, out_url = db_API_KEY, db_SECRET_KEY, db_token_url, db_out_url
+
 
         # 初始化模式选择变量
         mode_mr = None
 
         print("<进入默认选项>")
+
+        #读取配置文件
+        API_KEY, SECRET_KEY, token_url, out_url = config()
+        # 神秘bug
+        # 因为没有输入参数，函数内部存在修改变量的操作，所以内部生成了同名空变量，直接从新赋值一次创建新的内部变量
+        #API_KEY, SECRET_KEY, token_url, out_url = db_API_KEY, db_SECRET_KEY, db_token_url, db_out_url
+
         """
         print(f"<历史默认值为(回车使用历史值，输入序号进行修改)>"
               f"\n--->   <1，API_KEY:{db_API_KEY}>"
@@ -183,11 +196,13 @@ def mode_3_mr():
               f"\n--->   <3，token_url:{db_token_url}>"
               f"\n--->   <4，out_url:{db_out_url}>")
             try:
-                if int(mode_mr) > 4:
+                if mode_mr == "":
+                     print("确认参数，正在打开Orc")
+                elif mode_mr not in ["1", "2", "3", "4"]:
                     print("<不存在序号，请重新输入>")
                     mode_mr = None
-            except ValueError:
-                print("<确认参数，进入Orc>")
+            except Exception as e:
+                print("<错误参数，按回车退出>")
 
         #进入选项
         while mode_mr != "":#判断是否有正确的选项
@@ -261,5 +276,6 @@ def mode_3_mr():
 
 #------------------------
 if __name__ == '__main__':
+
     main()
 
