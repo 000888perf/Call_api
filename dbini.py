@@ -13,18 +13,17 @@ class dbini:
         except configparser.NoSectionError:
             print("<配置文件中中没有找到[database]节点，请检查 \"db.ini\" 是否存在或格式正确>")
             input("(按回车退出)")
-            exit()
+
 
         except configparser.NoOptionError:
             print("<[database]节点缺少项，请检查 \"db.ini\" 是否存在或格式正确>")
             input("(按回车退出)")
-            exit()
+
 
         except Exception as e:
             print("<读取配置文件出错，请检查 \"db.ini\" 是否存在或格式正确>")
             print("错误详情：",e)
             input("<按回车退出>")
-            exit()
 
     def set(self):
         return self.db_API_KEY,self.db_SECRET_KEY,self.db_token_url,self.db_out_url

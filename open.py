@@ -17,9 +17,9 @@ try:
     API_KEY, SECRET_KEY, token_url, out_url = db_API_KEY, db_SECRET_KEY, db_token_url, db_out_url
     print("<读取配置文件成功>")
 except Exception as e:
+    print("读取配置文件异常，请检查\" db.ini \"是否存在或格式正确")
     print("<错误详情：",e,">")
     input("(按回车退出)")
-    exit()
 
 #打包了一个用于打开Orc的函数
 def Cal_Api(API_KEY, SECRET_KEY, token_url, out_url):
@@ -36,7 +36,7 @@ def Cal_Api(API_KEY, SECRET_KEY, token_url, out_url):
             check_result = ocr_client.input_five()#如果不能获取token就返回“1”
             if check_result != 0:
                 print("<出现警告，正在退出...>")
-                running = float
+                running = False
                 break
             else:
                 #输入文件地址
@@ -47,7 +47,7 @@ def Cal_Api(API_KEY, SECRET_KEY, token_url, out_url):
                     Address = r"C:\Users\Administrator\Desktop\Python\百度云示范文件\批注 2026-04-16 152003.jpg"
 
                 elif Address == "td":  # 退出while
-                    running = float
+                    running = False
                     break
                 if os.path.exists(Address):  # os判断地址是否有效
                     print("<地址有效>")
@@ -56,47 +56,54 @@ def Cal_Api(API_KEY, SECRET_KEY, token_url, out_url):
                 else:
                     print("<无效地址>")
     except Exception as e:
-        print("错误详情：", e)
-        input("<按回车退出>")
-        exit()
+        print("<Orc识别错误，请检查参数格式是否正确>")
+        print("<--->   错误详情：\n      ", e,">")
+        input("(按回车退出)")
 
 #主函数
 def main():
+    try:
+        print("<欢迎使用百度OrcApi>")
 
-    print("<欢迎使用百度OrcApi>")
+        #主程序状态机
+        running_main = True
 
-    #主程序状态机
-    running_main = True
+        while running_main:
 
-    while running_main:
+            #选择选项
+            mode = input("(请输入选项，按回车确定) \n--->cs进入测试选项   --->mr进入默认选项\n--->zu进入自主选项   --->td退出")
+            while mode not in ["cs", "CS","cc","CC","zu", "ZU", "zz","mr","MR","mm","MM","td", "TD"]:
+                if mode == "":
+                    print("<输入为空，请重新输入>")
+                    mode = input("(请输入选项，按回车确定) \n--->cs进入测试选项   --->mr进入默认选项\n--->zu进入自主选项   --->td退出")
+                else:
+                    print("<不存在选项，请重新选择>")
+                    mode = input("(请输入选项，按回车确定) \n--->cs进入测试选项   --->mr进入默认选项\n--->zu进入自主选项   --->td退出")
 
-        #选择选项
-        mode = input("(请输入选项，按回车确定) \n--->cs进入测试选项   --->mr进入默认选项\n--->zu进入自主选项   --->td退出")
-        while mode not in ["cs", "CS","cc","CC","zu", "ZU", "zz","mr","MR","mm","MM","td", "TD"]:
-            if mode == "":
-                print("<输入为空，请重新输入>")
-                mode = input("(请输入选项，按回车确定) \n--->cs进入测试选项   --->mr进入默认选项\n--->zu进入自主选项   --->td退出")
-            else:
-                print("<不存在选项，请重新选择>")
-                mode = input("(请输入选项，按回车确定) \n--->cs进入测试选项   --->mr进入默认选项\n--->zu进入自主选项   --->td退出")
+            #测试选项，有固定参数
+            if mode in ("cs", "CS","cc","CC"):
+                mode = None
+                mode_1_cs()
 
-        #测试选项，有固定参数
-        if mode in ("cs", "CS","cc","CC"):
-            mode = None
-            mode_1_cs()
+            #自定义选项
+            elif mode in ("zu", "ZU", "zz","ZZ"):
+                mode = None
+                mode_2_zu()
 
-        #自定义选项
-        elif mode in ("zu", "ZU", "zz","ZZ"):
-            mode = None
-            mode_2_zu()
+            #默认选项，使用配置文件值，也可自己修改
+            elif mode in ('mr','MR','mm','MM'):
+                mode_3_mr()
+            #退出，退订
+            elif mode in ("td", "TD"):
+                mode = None
+                running_main = False
+                exit()
 
-        #默认选项，使用配置文件值，也可自己修改
-        elif mode in ('mr','MR','mm','MM'):
-            mode_3_mr()
-        #退出，退订
-        elif mode in ("td", "TD"):
-            mode = None
-            running_main = False
+    except  Exception as e:
+        print("<主函数运行异常>")
+        print("<--->   错误详情：\n      ", e,">")
+        input("(按回车退出)")
+
 #-----------------------
 def mode_1_cs():
     try:
@@ -113,9 +120,10 @@ def mode_1_cs():
         Cal_Api(API_KEY, SECRET_KEY, token_url, out_url)
 
     except Exception as e:
-        print("错误详情：", e)
-        input("<按回车退出>")
-        exit()
+        print("<测试选项运行异常，请检查参数格式是否正确>")
+        print("<--->   错误详情：\n      ", e,">")
+        input("(按回车退出)")
+
 def mode_2_zu():
     try:
         print("<进入自主选项>")
@@ -144,9 +152,10 @@ def mode_2_zu():
         #起到Orc
         Cal_Api(API_KEY, SECRET_KEY, token_url, out_url)
     except Exception as e:
-        print("错误详情：", e)
-        input("<按回车退出>")
-        exit()
+        print("<自主选项运行异常，请检查参数格式是否正确>")
+        print("<--->   错误详情：\n      ", e,">")
+        input("(按回车退出)")
+
 def mode_3_mr():
     try:
         # 神秘bug
@@ -246,9 +255,10 @@ def mode_3_mr():
         # 启动Orc
         Cal_Api(API_KEY, SECRET_KEY, token_url, out_url)
     except Exception as e:
-        print("错误详情：", e)
-        input("<按回车退出>")
-        exit()
+        print("<默认选项运行异常，请检查参数格式是否正确>")
+        print("<--->   错误详情：\n      ", e,">")
+        input("(按回车退出)")
+
 #------------------------
 if __name__ == '__main__':
     main()
