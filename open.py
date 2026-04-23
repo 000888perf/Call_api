@@ -26,7 +26,7 @@ def Cal_Api(API_KEY, SECRET_KEY, token_url, out_url):
     try:
 
         #初始化Orc状态机标志符//用于判断运行状态
-        running = False
+        running = True
         #创建类
         ocr_client = BaiduOrcApi.cal(API_KEY, SECRET_KEY, token_url, out_url)
 
@@ -36,7 +36,7 @@ def Cal_Api(API_KEY, SECRET_KEY, token_url, out_url):
             check_result = ocr_client.input_five()#如果不能获取token就返回“1”
             if check_result != 0:
                 print("<出现警告，正在退出...>")
-                running = True
+                running = float
                 break
             else:
                 #输入文件地址
@@ -47,7 +47,7 @@ def Cal_Api(API_KEY, SECRET_KEY, token_url, out_url):
                     Address = r"C:\Users\Administrator\Desktop\Python\百度云示范文件\批注 2026-04-16 152003.jpg"
 
                 elif Address == "td":  # 退出while
-                    running = True
+                    running = float
                     break
                 if os.path.exists(Address):  # os判断地址是否有效
                     print("<地址有效>")
